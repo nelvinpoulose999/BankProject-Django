@@ -210,13 +210,13 @@ class UserDetailsView(TemplateView):
             return render(request, 'mybank/userdetails.html', {'details':details})
 
 
-class UserUpdateView(TemplateView):
-    def get(self,request,*args, **kwargs):
-        try:
-            user_update=Account.objects.get(user=request.user)
-            flag=True if user_update else False
-            details = Account.objects.get(request.POST,instance=request.user)
-            return render(request, 'mybank/userdetails.html', {'details': details, 'flag': flag})
-        except:
-            return render(request, 'mybank/userupdate.html', )
+# class UserUpdateView(TemplateView):
+#     def get(self,request,*args, **kwargs):
+#         try:
+#             user_update=Account.objects.get(user=request.user)
+#             flag=True if user_update else False
+#             details = Account.objects.get(request.POST,instance=request.user)
+#             return render(request, 'mybank/userupdate.html', {'details': details, 'flag': flag})
+#         except:
+#             return render(request, 'mybank/userupdate.html' )
 
