@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{%extends 'mybank/base2.html'%}
+{%block body_block%}
+    <!-- ======= Contact Section ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Fund Transfer</h2>
+          <ol>
+            <li><a href="{%url 'base1' %}">Home</a></li>
+            <li>Transfer</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+    <!-- ======= Contact Section ======= -->
+    <section class="contact" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-duration="500">
+      <div class="container">
+
+        <div class="row">
+
+          <div class="col-lg-6">
+
+            <form action="" method="post" >
+              {%if message in message%}
+              <h5>{{message}}</h5>
+              {%else%}
+              {%csrf_token%}
+              {{form.as_p}}
+                <input type="submit" value="Create">
+              {%endif%}
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+{%endblock%}

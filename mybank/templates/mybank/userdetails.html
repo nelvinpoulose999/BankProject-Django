@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+{%extends 'mybank/base2.html'%}
+{%block body_block%}
+<!-- ======= Contact Section ======= -->
+<section class="breadcrumbs">
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>User Details</h2>
+            <ol>
+                <li><a href="{%url 'base1' %}">Home</a></li>
+                <li>Details</li>
+            </ol>
+        </div>
+
+    </div>
+</section><!-- End Contact Section -->
+
+<!-- ======= Contact Section ======= -->
+<section class="contact" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-duration="500">
+    <div class="container">
+
+        <div class="row" style="text-align:left;">
+
+            <div class="col-lg-7">
+            </div>
+
+            <div class="col-lg-5">
+                <div class="main">
+                    <table class="table">
+                       <p style="text-align:center;"><i class="fa fa-user fa-3x" aria-hidden="true"></i></p>
+                        <tr>
+                            <th >
+                                <h6 class="head"><strong>Personal Details</strong></h6>
+                            </th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h6>First Name</h6>
+                            </td>
+                            <td>
+                                {{udetails.first_name}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h6>Last Name</h6>
+                            </td>
+                            <td>
+                                {{udetails.last_name}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h6>Phone Number</h6>
+                            </td>
+                            <td>
+                                {{udetails.phone_number}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h6>Email-Id</h6>
+                            </td>
+                            <td>
+                                {{udetails.email}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h6>Balance</h6>
+                            </td>
+                            <td>
+                                {{details.balance}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h6>Account Type</h6>
+                            </td>
+                            <td>
+                               {{details.ac_type}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h6>Status</h6>
+                            </td>
+                            <td>
+                                {{details.active_status}}
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section><!-- End Contact Section -->
+{%endblock%}
