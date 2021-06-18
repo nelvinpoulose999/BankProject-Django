@@ -18,4 +18,5 @@ from django.urls import path
 from .views import Usermixinregister
 urlpatterns = [
     path('userregister',Usermixinregister.as_view(),name='register'),
+    path('userregister', Usermixinregister.as_view(), name='register'),
 ]

@@ -73,3 +73,29 @@ class TransationCreateForm(forms.Form):
             message='Insufficient balance'
             self.add_error('amount',message)
 
+
+class AccountEditForm(ModelForm):
+    class Meta:
+        model=Account
+        fields=['account_number','ac_type','active_status']
+        widgets={
+            'account_number':forms.TextInput(attrs={'readonly':True,'class': 'form-control'}),
+            'ac_type': forms.Select(attrs={'class': 'form-control'}),
+            'active_status': forms.Select(attrs={'class': 'form-control'})
+        }
+
+
+class UserUpdateForm(ModelForm):
+    class Meta:
+         model=CustomUser
+         fields=['username','first_name','last_name','email','phone_number','age']
+
+         widgets = {
+                'username': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Enter Username','readonly':True}),
+                'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Firstname','readonly':True}),
+                'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Lastname','readonly':True}),
+                'email': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Email Id'}),
+                'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Phone Number'}),
+                'age': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Age'}),
+
+                }

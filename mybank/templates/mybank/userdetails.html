@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<head>
+    <title>User Details</title>
+</head>
 {%extends 'mybank/base2.html'%}
 {%block body_block%}
 <!-- ======= Contact Section ======= -->
@@ -90,6 +93,12 @@
                             <td>
                                 {{details.active_status}}
                             </td>
+                        </tr>
+                         <tr>
+                            <td>
+                                <a href="{%url 'update' udetails.id%}">Edit Profile</a>
+                            </td>
+
                         </tr>
 
                     </table>

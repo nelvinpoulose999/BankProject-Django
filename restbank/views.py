@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics,mixins
 
 from mybank.models import Account,CustomUser,Transactions
-from .serializer import UserRegisterationSerializer,AccountSerialiser
+from .serializer import UserRegisterationSerializer,AccountSerialiser,TransactionSerialiser
 
 # Create your views here.
 class Usermixinregister(mixins.ListModelMixin,
@@ -33,7 +33,7 @@ class TransactiondetailmixinView(generics.GenericAPIView,
                           mixins.RetrieveModelMixin,
                           mixins.DestroyModelMixin):
     queryset = Transactions.objects.all()
-    serializer_class =AccountSerialiser
+    serializer_class =TransactionSerialiser
     def get(self,request,*args,**kwargs):
         return self.retrieve(request,*args,**kwargs)
     def post(self,request,*args,**kwargs):

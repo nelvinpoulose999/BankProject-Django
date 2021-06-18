@@ -22,13 +22,16 @@
 
         <div class="row">
 
-          <div class="col-lg-6">
+            <div class="col-lg-6">
+                {% for message in messages %}
+                <label><p style="text-align:left;color:red;">{{ message }}</p></label>
+                {% endfor %}
+                <form action="" method="post">
 
-            <form action="" method="post" >
-              {%if message in message%}
-              <h5>{{message}}</h5>
-              {%else%}
-              {%csrf_token%}
+                    {%if msg in msg%}
+                    <h5>{{ msg}}</h5>
+                    {%else%}
+                    {%csrf_token%}
               {{form.as_p}}
                 <input type="submit" value="Create">
               {%endif%}

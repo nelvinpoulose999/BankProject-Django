@@ -28,5 +28,5 @@ urlpatterns = [
     path('logout',Signout.as_view(),name='logout'),
     path('base1',myhomepage,name='base1'),
     path('details', UserDetailsView.as_view(), name='details'),
-    path('update', UserUpdateView.as_view(), name='update')
+    path('update/<int:pk>', UserUpdateView.as_view(), name='update')
 ]

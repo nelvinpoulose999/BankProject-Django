@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate,login as djangologin,logout
 from django.shortcuts import render,redirect
 from django.views.generic import TemplateView
-from .forms import UserRegisterationForm,UserLoginForm,AccountCreationForm,TransationCreateForm
+from .forms import UserRegisterationForm,UserLoginForm,AccountCreationForm,TransationCreateForm,AccountEditForm,UserUpdateForm
 from .models import CustomUser,Account,Transactions
 from django.utils.decorators import method_decorator
 from .decorators import account_validator,user_login
@@ -138,15 +138,15 @@ class TransationView(TemplateView,GetUserMixin):
             flag = True if currentaccount else False
             status=currentaccount.active_status
             if status=='inactive':
-                message='Account is not activated'
-                return render(request, self.template_name, {'message': message,'flag':flag})
+                msg='Account is not activated'
+                return render(request, self.template_name, {' msg':  msg,'flag':flag})
             else:
                 form = self.form_class(initial={'user': request.user})
                 return render(request, self.template_name, {'form':form,'flag':flag})
         except:
-            message='Sorry,No Account'
+            msg='Sorry,No Account'
             # self.context['form'] = self.form_class(initial={'user': request.user})
-            return render(request, self.template_name, {'message': message})
+            return render(request, self.template_name, {' msg':  msg})
 
     def post(self,request,*args,**kwargs):
         form=self.form_class(request.POST)
@@ -155,14 +155,20 @@ class TransationView(TemplateView,GetUserMixin):
             amount=form.cleaned_data.get('amount')
             remarks=form.cleaned_data.get('remarks')
             account=self.get_user(to_account)
-            account.balance+=int(amount)
-            account.save()
-            currentaccount=Account.objects.get(user=request.user)
-            currentaccount.balance-=int(amount)
-            currentaccount.save()
-            transaction=Transactions(user=request.user,amount=amount,to_account=to_account,remarks=remarks)
-            transaction.save()
-            return redirect('index')
+            if account.active_status=='active':
+                account.balance+=int(amount)
+                account.save()
+                currentaccount=Account.objects.get(user=request.user)
+                currentaccount.balance-=int(amount)
+                currentaccount.save()
+                transaction=Transactions(user=request.user,amount=amount,to_account=to_account,remarks=remarks)
+                transaction.save()
+                # messages.success(request, 'Transaction Successful')
+                return redirect('index')
+            else:
+                messages.error(request, 'Invalid Account')
+                self.context['form'] = form
+                return render(request, self.template_name, self.context)
         else:
             self.context['form']=form
             return render(request, self.template_name, self.context)
@@ -200,23 +206,56 @@ class Signout(TemplateView):
 class UserDetailsView(TemplateView):
     def get(self, request,*args, **kwargs):
         try:
-            user_acco=Account.objects.get(user=request.user)
-            flag=True if user_acco else False
             details=Account.objects.get(user=request.user)
-            udetails=CustomUser.objects.get(first_name=request.user.first_name,phone_number=request.user.phone_number,email=request.user.email)
-            return render(request, 'mybank/userdetails.html', {'details':details,'udetails':udetails,
-                                                            'flag': flag})
+            flag=True if details else False
+            udetails=CustomUser.objects.get(username=request.user)
+            return render(request, 'mybank/userdetails.html', {'details':details,'udetails':udetails,'flag': flag})
         except:
-            return render(request, 'mybank/userdetails.html', {'details':details})
+            udetails = CustomUser.objects.get(username=request.user)
+            return render(request, 'mybank/userdetails.html', {'udetails':udetails})
+
+@method_decorator(user_login,name='dispatch')
+class UserUpdateView(TemplateView):
+    model_account = Account
+    model_user =CustomUser
+    template_name = 'mybank/userupdate.html'
+    userform_class = UserUpdateForm
+    accountform_class=AccountEditForm
+    context = {}
+
+    def get(self,request,*args, **kwargs):
+        id=kwargs.get('pk')
+        try:
+            userupdate=self.model_user.objects.get(id=id)
+            accountedit=self.model_account.objects.get(user_id=userupdate.id)
+            flag=True if accountedit else False
+            userform=self.userform_class(instance=userupdate)
+            accountform=self.accountform_class(instance=accountedit)
+            return render(request, self.template_name, {'userform': userform,'accountform': accountform, 'flag': flag})
+        except:
+            userupdate = self.model_user.objects.get(id=id)
+            userform = self.userform_class(instance=userupdate)
+            return render(request, self.template_name,{'userform': userform})
+
+    def post(self,request,*args,**kwargs):
+        id = kwargs.get('pk')
+        try:
+            userupdate = self.model_user.objects.get(id=id)
+            accountedit = self.model_account.objects.get(user_id=userupdate.id)
+            userform = self.userform_class(request.POST, instance=userupdate)
+            accountform = self.accountform_class(request.POST, instance=accountedit)
+            if userform.is_valid() & accountform.is_valid():
+                userform.save()
+                accountform.save()
+                return redirect('details')
+            else:
+                return render(request, self.template_name, {'userform': userform,'accountform': accountform})
+        except:
+            userupdate = self.model_user.objects.get(id=id)
+            userform = self.userform_class(request.POST, instance=userupdate)
+            if userform.is_valid():
+                userform.save()
+                return redirect('details')
 
 
-# class UserUpdateView(TemplateView):
-#     def get(self,request,*args, **kwargs):
-#         try:
-#             user_update=Account.objects.get(user=request.user)
-#             flag=True if user_update else False
-#             details = Account.objects.get(request.POST,instance=request.user)
-#             return render(request, 'mybank/userupdate.html', {'details': details, 'flag': flag})
-#         except:
-#             return render(request, 'mybank/userupdate.html' )
 
